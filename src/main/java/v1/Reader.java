@@ -32,7 +32,6 @@ public class Reader implements Compile {
         Token token;
         while (ts.hasNext()) {
             ts.skipWhitespace();
-            ts.skipComment();
 
             int keywordId = ts.isKeyword();
 
@@ -53,9 +52,13 @@ public class Reader implements Compile {
                     token = Token.EOF;
                     ts.abort(String.format("LexingError: Unknown character '%s' found at index '%d'", ts.current(), ts.getIndex()));
                 }
-            }
-            else if (ts.current().equals("-")) {
-                token = Token.MINUS;
+            } else if (ts.current().equals("-")) {
+                if (ts.peek().equals("-")) {
+                    ts.skipComment();
+                    token = Token.COMMENT;
+                } else {
+                    token = Token.MINUS;
+                }
             } else if (ts.current().equals("/")) {
                 token = Token.DIVIDE;
             } else if (ts.current().equals("%")) {
@@ -79,8 +82,7 @@ public class Reader implements Compile {
                     case 360 -> Token.IDENTIFIER;
                     default -> Token.EOF;
                 };
-            }
-            else {
+            } else {
                 token = Token.EOF;
                 ts.abort(String.format("LexingError: Unknown character '%s' found at index '%d'", ts.current(), ts.getIndex()));
             }

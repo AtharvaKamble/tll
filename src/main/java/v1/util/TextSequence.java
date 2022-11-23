@@ -1,6 +1,7 @@
 package main.java.v1.util;
 
 import com.sun.security.jgss.GSSUtil;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +35,18 @@ public class TextSequence {
 
     public String next() {
         this.index++;
+        if (this.index < this.text.length()) {
+            return toString(text.charAt(this.index));
+        } else {
+            return "\0";
+        }
+    }
+
+    public String next(int offset) {
+        while (offset >= 0) {
+            this.index++;
+            offset--;
+        }
         if (this.index < this.text.length()) {
             return toString(text.charAt(this.index));
         } else {
@@ -147,18 +160,30 @@ public class TextSequence {
         return -1;
     }
 
-    public void skipComment() {
-        if (this.current().equals("/")) {
-            if (this.peek().equals("/")) {
+    public String skipComment() {
+        StringBuilder commentContent = new StringBuilder();
 
-                while (!this.current().equals("\n")) {
-                    this.next();
-                }
-                this.next();
-//                System.out.println(Token.COMMENT);
-//                abort(String.format("Lexing error: unknown character '%c' at index %d", this.current(), this.index));
+        int startIndex = this.index;
+
+        this.next(2);
+        while (!this.current().equals("-")) {
+            if (current().equals("\0")) {
+                index = startIndex;
+                abort(String.format("LexingError: Unknown character '%s' found at index '%d'", this.current(), this.getIndex()));
             }
+            commentContent.append(this.current());
+            this.next();
         }
+        this.next();
+        if (this.current().equals("-")) {
+            this.next();
+        }
+        else {
+            index = startIndex;
+            abort(String.format("LexingError: Unknown character '%s' found at index '%d'", this.current(), this.getIndex()));
+        }
+
+        return commentContent.toString();
     }
 
     public void skipWhitespace() {

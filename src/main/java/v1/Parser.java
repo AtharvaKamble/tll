@@ -22,7 +22,12 @@ public class Parser implements Compile {
     }
 
     private void parse() {
+        System.out.println("PROGRAM:");
 
+        while (!ts.verifyCurrent(Token.EOF)) {
+            System.out.println(ts.current());
+            ts.next();
+        }
     }
 
     private void program() {

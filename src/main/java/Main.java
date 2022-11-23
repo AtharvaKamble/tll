@@ -1,6 +1,9 @@
 package main.java;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 import main.java.v1.Parser;
 import main.java.v1.Reader;
@@ -9,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException, IOException {
         StringBuilder buff = new StringBuilder();
         try {
-            final BufferedReader scan = new BufferedReader(new FileReader("C:\\Users\\DRAG\\Desktop\\test.lrn"));
+            final BufferedReader scan = new BufferedReader(new FileReader("C:\\Users\\DRAG\\Desktop\\test.tll"));
             int byt = 0;
             while ((byt = scan.read()) != -1) {
                 buff.append((char) byt) ;
@@ -20,10 +23,13 @@ public class Main {
         }
 
         String code = buff.toString().trim();
-
+//        System.out.println(code);
         Reader reader = new Reader(code);
         reader.start();
-        reader.tokenList.forEach(token -> {System.out.print(token + " | ");});
+//         Display all tokens
+//        reader.tokenList.forEach(token -> {
+//            System.out.print(token + " | ");
+//        });
         System.out.println();
         Parser parser = new Parser(reader.tokenList);
         parser.start();
