@@ -40,6 +40,13 @@ public class TokenSequence {
         return index <= tokenList.size() - 1;
     }
 
+    public void match(Token token) {
+        if (!verifyCurrent(token)) {
+            abort();
+        }
+        next();
+    }
+
     public boolean verifyCurrent(Token token) {
         return token == current();
     }

@@ -6,6 +6,7 @@ public enum Token {
     STRING(2),
     COMMENT(3),
     UNDERSCORE(4),
+    NEWLINE(5),
 
     // Operators
     PLUS(200),

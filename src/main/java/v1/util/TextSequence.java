@@ -165,7 +165,7 @@ public class TextSequence {
 
         int startIndex = this.index;
 
-        this.next(2);
+        this.next(1);
         while (!this.current().equals("-")) {
             if (current().equals("\0")) {
                 index = startIndex;
@@ -186,6 +186,24 @@ public class TextSequence {
         return commentContent.toString();
     }
 
+    public String handleString() {
+        StringBuilder stringContent = new StringBuilder();
+
+        int startIndex = index;
+        this.next();
+        while (!this.current().equals("\"")) {
+            if (current().equals("\0")) {
+                index = startIndex;
+                abort(String.format("LexingError: Unknown character '%s' found at index '%d'", this.current(), this.getIndex()));
+            }
+
+            stringContent.append(this.current());
+            this.next();
+        }
+//        System.out.println(stringContent);
+        return stringContent.toString();
+    }
+
     public void skipWhitespace() {
         if (isWhiteSpaceOrEOF(current())) {
             while (isWhiteSpaceOrEOF(peek())
@@ -198,7 +216,6 @@ public class TextSequence {
 
     private boolean isWhiteSpace(String c) {
         return c.equals(" ") ||
-                c.equals("\n") ||
                 c.equals("\t") ||
                 c.equals("\r") ||
                 c.equals("\f");
@@ -230,7 +247,7 @@ public class TextSequence {
         return String.valueOf(c);
     }
 
-    private static Character toChar(String s) {
+    public static Character toChar(String s) {
         if (s.length() == 1) {
             return s.charAt(0);
         }

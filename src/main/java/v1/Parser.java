@@ -4,6 +4,7 @@ import main.java.v1.util.Token;
 import main.java.v1.util.TokenSequence;
 
 import java.util.List;
+import java.util.Locale;
 
 public class Parser implements Compile {
     private final TokenSequence ts;
@@ -22,26 +23,54 @@ public class Parser implements Compile {
     }
 
     private void parse() {
-        System.out.println("PROGRAM:");
-
-        while (!ts.verifyCurrent(Token.EOF)) {
-            System.out.println(ts.current());
-            ts.next();
-        }
+        program();
     }
 
     private void program() {
-        statement();
+        System.out.println("PROGRAM:");
+
+        while (!ts.verifyCurrent(Token.EOF)) {
+//            System.out.println(ts.current());
+            statement();
+        }
     }
 
     private void statement() {
-        expression();
+        if (ts.verifyCurrent(Token.PRINT)) {
+            System.out.println("STATEMENT-PRINT");
+            ts.next();
+
+            if (ts.verifyCurrent(Token.STRING)) {
+                ts.next();
+            } else {
+                expression();
+            }
+        }
+
+        this.handleNewLineOrEOF();
+
     }
 
     private void expression() {
+        System.out.println("EXPRESSION");
         // Might call something else
         // Hence, creating an implicit tree
     }
 
+
+    private void handleNewLineOrEOF() {
+        if (ts.verifyCurrent(Token.EOF)) {
+            System.out.println("EOF");
+            ts.match(Token.EOF);
+        } else {
+            System.out.println("NEWLINE");
+            ts.match(Token.NEWLINE);
+            while (ts.verifyCurrent(Token.NEWLINE)) {
+                ts.next();
+            }
+        }
+
+
+    }
 
 }

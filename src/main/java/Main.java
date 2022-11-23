@@ -23,23 +23,17 @@ public class Main {
         }
 
         String code = buff.toString().trim();
-//        System.out.println(code);
         Reader reader = new Reader(code);
         reader.start();
 //         Display all tokens
 //        reader.tokenList.forEach(token -> {
 //            System.out.print(token + " | ");
 //        });
-        System.out.println();
+//        System.out.println();
         Parser parser = new Parser(reader.tokenList);
         parser.start();
     }
 }
-
-//    Scanner sc = new Scanner(new File("myNumbers"));
-//      while (sc.hasNextLong()) {
-//              long aLong = sc.nextLong();
-//              }
 
 /*
  variable<number> someNumber = 10;

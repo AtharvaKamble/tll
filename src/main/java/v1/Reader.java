@@ -18,7 +18,6 @@ public class Reader implements Compile {
         this.tokenList = new ArrayList<>();
     }
 
-
     public void start() {
         this.read();
         System.out.println("Lexing finished successfully!");
@@ -54,7 +53,7 @@ public class Reader implements Compile {
                 }
             } else if (ts.current().equals("-")) {
                 if (ts.peek().equals("-")) {
-                    ts.skipComment();
+                    String comment = ts.skipComment();
                     token = Token.COMMENT;
                 } else {
                     token = Token.MINUS;
@@ -65,6 +64,11 @@ public class Reader implements Compile {
                 token = Token.MODULO;
             } else if (ts.current().equals("_")) {
                 token = Token.UNDERSCORE;
+            } else if (ts.current().equals("\"")) {
+                String content = ts.handleString();
+                token = Token.STRING;
+            } else if (ts.current().equals("\n")) {
+                token = Token.NEWLINE;
             }
             // If keyword is found, find out which one is it
             else if (keywordId != 0) {
